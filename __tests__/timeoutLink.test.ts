@@ -1,21 +1,21 @@
+import { ApolloLink, execute, Observable, gql } from '@apollo/client';
 import TimeoutLink from '../src/timeoutLink';
-import { ApolloLink, execute, Observable } from 'apollo-link';
-import gql from 'graphql-tag';
 
 const TEST_TIMEOUT = 100;
 
 const timeoutLink: TimeoutLink = new TimeoutLink(TEST_TIMEOUT);
 
 const query = gql`
-{
-  foo {
-    bar
+  {
+    foo {
+      bar
+    }
   }
-}`;
+`;
 
 let called, delay;
 
-const mockLink = new ApolloLink(operation => {
+const mockLink = new ApolloLink(() => {
   called++;
   return new Observable(observer => {
     setTimeout(() => {
@@ -42,7 +42,7 @@ test('short request does not timeout', done => {
     error() {
       expect('error called').toBeFalsy();
       done();
-    }
+    },
   });
 });
 
@@ -59,7 +59,7 @@ test('long request times out', done => {
       expect(error.timeout).toEqual(100);
       expect(error.statusCode).toEqual(408);
       done();
-    }
+    },
   });
 });
 
@@ -72,10 +72,10 @@ test('configured value through context does not time out', done => {
       expect(called).toBe(1);
       done();
     },
-    error(error) {
+    error() {
       expect('error called').toBeFalsy();
       done();
-    }
+    },
   });
 });
 
@@ -93,6 +93,6 @@ test('configured short value through context time out', done => {
       expect(error.timeout).toEqual(configured);
       expect(error.statusCode).toEqual(408);
       done();
-    }
+    },
   });
 });

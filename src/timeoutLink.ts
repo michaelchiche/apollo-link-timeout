@@ -1,4 +1,4 @@
-import { ApolloLink, Observable, Operation, NextLink } from 'apollo-link';
+import { ApolloLink, Observable, Operation, NextLink } from '@apollo/client';
 import { DefinitionNode } from 'graphql';
 import TimeoutError from './TimeoutError';
 
@@ -11,7 +11,7 @@ export default class TimeoutLink extends ApolloLink {
   private timeout: number;
   private statusCode?: number;
 
-  constructor(timeout: number, statusCode?: number) {
+  public constructor(timeout: number, statusCode?: number) {
     super();
     this.timeout = timeout || DEFAULT_TIMEOUT;
     this.statusCode = statusCode;
@@ -37,7 +37,7 @@ export default class TimeoutLink extends ApolloLink {
     const chainObservable = forward(operation); // observable for remaining link chain
 
     const operationType = (operation.query.definitions as any).find(
-      (def: DefinitionNode) => def.kind === 'OperationDefinition'
+      (def: DefinitionNode) => def.kind === 'OperationDefinition',
     ).operation;
 
     if (requestTimeout <= 0 || operationType === 'subscription') {
@@ -60,7 +60,7 @@ export default class TimeoutLink extends ApolloLink {
           clearTimeout(timer);
           observer.error(error);
           observer.complete();
-        }
+        },
       );
 
       // if timeout expires before observable completes, abort call, unsubscribe, and return error
@@ -73,13 +73,18 @@ export default class TimeoutLink extends ApolloLink {
           // future retry of the operation.
           const context = operation.getContext();
           let fetchOptions = context.fetchOptions || {};
-          if(fetchOptions.controller === controller && fetchOptions.signal === controller.signal) {
-             fetchOptions = { ...fetchOptions, controller: null, signal: null };
-             operation.setContext({ fetchOptions });
+          if (
+            fetchOptions.controller === controller &&
+            fetchOptions.signal === controller.signal
+          ) {
+            fetchOptions = { ...fetchOptions, controller: null, signal: null };
+            operation.setContext({ fetchOptions });
           }
         }
 
-        observer.error(new TimeoutError('Timeout exceeded', requestTimeout, this.statusCode));
+        observer.error(
+          new TimeoutError('Timeout exceeded', requestTimeout, this.statusCode),
+        );
         subscription.unsubscribe();
       }, requestTimeout);
 
@@ -90,7 +95,7 @@ export default class TimeoutLink extends ApolloLink {
           unsubscribe: () => {
             clearTimeout(timer);
             subscription.unsubscribe();
-          }
+          },
         });
       }
 

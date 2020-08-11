@@ -6,7 +6,7 @@
     "removeComments": false,
     "sourceMap": true,
     "declaration": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "skipLibCheck": true,

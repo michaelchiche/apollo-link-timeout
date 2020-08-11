@@ -3,35 +3,40 @@
   "version": "1.4.1",
   "description": "Abort requests that take longer than a specified timeout period",
   "dependencies": {
-    "apollo-link": "^1.2.2"
+    "@apollo/client": "3.1.3",
+    "react": "^16.13.1"
   },
   "devDependencies": {
-    "@types/graphql": "^0.13.1",
-    "@types/jest": "^23.1.1",
-    "@types/node": "^10.3.4",
-    "graphql": "^0.13.2",
-    "graphql-tag": "^2.9.2",
-    "jest": "^23.1.0",
-    "ts-jest": "^22.4.6",
-    "ts-loader": "^4.4.1",
-    "tslint": "^5.8.0",
-    "typescript": "^2.9.2"
+    "@types/graphql": "^14.5.0",
+    "@types/jest": "^26.0.9",
+    "@types/node": "^14.0.27",
+    "@typescript-eslint/eslint-plugin": "^3.9.0",
+    "@typescript-eslint/parser": "^3.9.0",
+    "eslint": "^7.6.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-jsdoc": "^30.2.1",
+    "eslint-plugin-no-null": "^1.0.2",
+    "graphql": "^15.3.0",
+    "jest": "^26.3.0",
+    "ts-jest": "^26.2.0",
+    "ts-loader": "^8.0.2",
+    "typescript": "^3.9.7"
   },
   "main": "lib/timeoutLink.js",
   "types": "lib/timeoutLink.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/drcallaway/apollo-link-timeout"
+    "url": "https://github.com/michaelchiche/apollo-link-timeout"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
     "build": "tsc",
-    "lint": "tslint src/*.ts* src/**/*.ts*",
+    "lint": "eslint src/*.ts* src/**/*.ts*",
     "test": "jest",
-    "prepublish": "yarn lint && yarn test && yarn build",
-    "deploy": "yarn publish && git push"
+    "prepublish": "npm run test && npm run build",
+    "deploy": "npm run publish && git push"
   },
   "keywords": [
     "graphql",
